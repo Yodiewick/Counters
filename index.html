@@ -222,9 +222,9 @@
     height: 3px;
     background: var(--counter-color, var(--accent));
     opacity: 0.55;
-    transition: opacity 0.3s ease, box-shadow 0.3s ease;
+    transition: opacity 0.3s ease;
   }
-  .counter-card.goal-met::before { opacity: 1; box-shadow: 0 0 14px var(--counter-color); }
+  .counter-card.goal-met::before { opacity: 1; }
 
   .counter-head {
     display: flex;
@@ -256,12 +256,11 @@
     stroke-width: 3;
     stroke-linecap: round;
     transition: stroke-dashoffset 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-    filter: drop-shadow(0 0 6px var(--counter-color, var(--accent)));
   }
   .counter-icon {
     position: absolute;
     inset: 5px;
-    border-radius: 12px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1287,7 +1286,7 @@
    Constants
    ============================================================ */
 const STORAGE_KEY = 'counterAppData';
-const APP_VERSION = '4.0.0';
+const APP_VERSION = '4.0.2';
 
 const ICONS = [
   '💪','🏃','📚','💰','🚭','💧','☕','🎯','📖','🎵','🧘','🍎',
@@ -1361,11 +1360,9 @@ const state = {
   }
 };
 
-/* Undo stack */
 const undoStack = [];
 const MAX_UNDO = 30;
 
-/* Celebration queue */
 const celebrationQueue = [];
 let celebrationActive = false;
 
@@ -1819,7 +1816,7 @@ function computeLevel() {
 }
 
 /* ============================================================
-   Achievements check
+   Achievements
    ============================================================ */
 function checkAchievements() {
   const stats = computeGlobalStats();
@@ -1969,7 +1966,7 @@ function moveCounter(id, direction) {
 }
 
 /* ============================================================
-   Counter celebrations
+   Counter-level celebrations
    ============================================================ */
 function checkCounterCelebrations(counter) {
   const stats = computeStats(counter);
@@ -2815,7 +2812,6 @@ function confirmReset() {
         );
         if (!c3) { toast('Reset cancelled'); return; }
 
-        // Perform reset
         localStorage.removeItem(STORAGE_KEY);
         state.data.counters = [];
         state.data.onboarded = false;
